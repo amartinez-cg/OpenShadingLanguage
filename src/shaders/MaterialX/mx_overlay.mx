@@ -14,5 +14,5 @@ shader SHADER_NAME(mx_overlay)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    out =  overlay(fg, bg); 
+    out = overlay(fg, bg); 
 }

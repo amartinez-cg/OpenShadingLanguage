@@ -7,19 +7,20 @@
 #include "mx_types.h"
 #include "oslutil.h"
 
-shader
-SHADER_NAME(mx_cellnoise3d)
-    [[ string help = "3D cell noise in one channel"  ]]
+shader SHADER_NAME(mx_cellnoise3d)
+    [[ string help = "3D cell noise in one channel" ]]
   (
     point position = transform ("object", P)
         [[  string help = "input coordinate position (default: object space P)",
             int lockgeom = 0 ]],
+            
     output TYPE out = TYPE_ZERO
-
   )
 {
     float fnoise = (float) cellnoise (position);
+
     color cnoise = (color) cellnoise (position);
+    
     #if defined(FLOAT)
         out = fnoise;
     #elif defined(COLOR) || defined(VECTOR)

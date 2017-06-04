@@ -9,10 +9,10 @@
 shader SHADER_NAME(mx_invert)
     [[ string help = TYPE_STR" Subtract the incoming float/color/vector from amount in all channels," ]]
   (
-    TYPE in1 = TYPE_DEFAULT_IN,
+    TYPE in = TYPE_DEFAULT_IN,
     TYPE amount = TYPE_ONE,
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    out = in1 - amount; 
+    out = amount - in;
 }

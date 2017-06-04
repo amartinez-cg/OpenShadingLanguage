@@ -33,6 +33,16 @@ vector2 __operator__add__(vector2 a, float b)
     return a + vector2(b, b);
 }
 
+vector2 __operator__add__(int a, vector2 b)
+{
+    return vector2(a, a) + b;
+}
+
+vector2 __operator__add__(float a, vector2 b)
+{
+    return vector2(a, a) + b;
+}
+
 vector2 __operator__sub__(vector2 a, vector2 b)
 {
     return vector2(a.x - b.x, a.y - b.y);
@@ -48,6 +58,16 @@ vector2 __operator__sub__(vector2 a, float b)
     return a - vector2(b, b);
 }
 
+vector2 __operator__sub__(int a, vector2 b)
+{
+    return vector2(a, a) - b;
+}
+
+vector2 __operator__sub__(float a, vector2 b)
+{
+    return vector2(a, a) - b;
+}
+
 vector2 __operator__mul__(vector2 a, vector2 b)
 {
     return vector2(a.x * b.x, a.y * b.y);
@@ -61,6 +81,16 @@ vector2 __operator__mul__(vector2 a, int b)
 vector2 __operator__mul__(vector2 a, float b)
 {
     return a * vector2(b, b);
+}
+
+vector2 __operator__mul__(int a, vector2 b)
+{
+    return b * vector2(a, a);
+}
+
+vector2 __operator__mul__(float a, vector2 b)
+{
+    return b * vector2(a, a);
 }
 
 vector2 __operator__div__(vector2 a, vector2 b)
@@ -80,6 +110,16 @@ vector2 __operator__div__(vector2 a, float b)
     return a * vector2(b_inv, b_inv);
 }
 
+vector2 __operator__div__(int a, vector2 b)
+{
+    return vector2(a, a) / b;
+}
+
+vector2 __operator__div__(float a, vector2 b)
+{
+    return vector2(a, a) / b;
+}
+
 int __operator__eq__(vector2 a, vector2 b)
 {
     return (a.x == b.x) && (a.y == b.y);
@@ -89,7 +129,6 @@ int __operator__ne__(vector2 a, vector2 b)
 {
     return (a.x != b.x) || (a.y != b.y);
 }
-
 
 vector2 abs(vector2 a)
 {
@@ -163,26 +202,6 @@ vector2 fgamma(vector2 in, float g)
                     );
 }
 
-vector2 invert(vector2 in, vector2 amount)
-{
-    return vector2 (amount.x - in.x,
-                    amount.y - in.y
-                    );
-}
-
-vector2 invert(vector2 in, float amount)
-{
-    return vector2 (amount - in.x,
-                    amount - in.y
-                    );
-}
-
-vector2 invert(vector2 in)
-{
-    return invert(in, 1.0);
-    
-}
-
 vector2 clamp(vector2 in, vector2 low, vector2 high)
 {
     return vector2 (clamp(in.x, low.x, high.x),
@@ -192,9 +211,7 @@ vector2 clamp(vector2 in, vector2 low, vector2 high)
 
 vector2 clamp(vector2 in, float low, float high)
 {
-    return vector2 (clamp(in.x, low, high),
-                    clamp(in.y, low, high)
-                    );
+    return clamp(in, vector2(low, low), vector2(high, high));
 }
 
 vector2 contrast(vector2 in, vector2 amount, vector2 pivot)
@@ -206,9 +223,7 @@ vector2 contrast(vector2 in, vector2 amount, vector2 pivot)
 
 vector2 contrast(vector2 in, float amount, float pivot)
 {
-    return vector2 (contrast(in.x, amount, pivot),
-                    contrast(in.y, amount, pivot)
-                    );
+    return contrast(in, vector2(amount, amount), vector2(pivot, pivot));
 }
 
 vector2 exponent(vector2 in, vector2 amount)
@@ -220,87 +235,60 @@ vector2 exponent(vector2 in, vector2 amount)
 
 vector2 exponent(vector2 in, float amount)
 {
-    return vector2 (exponent(in.x, amount),
-                    exponent(in.y, amount)
-                    );
+    return exponent(in, vector2(amount, amount));
 }
 
-vector2 max(vector2 in, vector2 amount)
+vector2 max(vector2 a, vector2 b)
 {
-    return vector2 (max(in.x, amount.x),
-                    max(in.y, amount.y)
-                    );
+    return vector2 (max(a.x, b.x),
+                    max(a.y, b.y));
 }
 
-vector2 max(vector2 in, float amount)
+vector2 max(vector2 a, float b)
 {
-    return vector2 (max(in.x, amount),
-                    max(in.y, amount)
-                    );
+    return max(a, vector2(b, b));
 }
 
-vector2 normalize(vector2 in)
+vector2 normalize(vector2 a)
 {
-    vector v = normalize(vector(in.x, in.y, 0));
+    vector v = normalize(vector(a.x, a.y, 0));
     return vector2 (v[0], v[1]);
 }
 
-vector2 vscale(vector2 in, vector2 amount, vector2 center)
+vector2 min(vector2 a, vector2 b)
 {
-    return vector2 ((in.x - center.x)/amount.x + center.x,
-                    (in.y - center.y)/amount.y + center.y
+    return vector2 (min(a.x, a.x),
+                    min(b.y, b.y)
                     );
 }
 
-
-vector2 min(vector2 in, vector2 amount)
+vector2 min(vector2 a, float b)
 {
-    return vector2 (min(in.x, amount.x),
-                    min(in.y, amount.y)
-                    );
+    return min(a, vector2(b, b));
 }
 
-vector2 min(vector2 in, float amount)
+vector2 fmod(vector2 a, vector2 b)
 {
-    return vector2 (min(in.x, amount),
-                    min(in.y, amount)
-                    );
+    return vector2 (fmod(a.x, b.x),
+                    fmod(a.y, b.y));
 }
 
-vector2 fmod(vector2 in, vector2 amount)
+vector2 fmod(vector2 a, float b)
 {
-    return vector2 (fmod(in.x, amount.x),
-                    fmod(in.y, amount.y)
-                    );
+    return fmod(a, vector2(b, b));
 }
 
-vector2 fmod(vector2 in, float amount)
+float magnitude(vector2 a)
 {
-    return vector2 (fmod(in.x, amount),
-                    fmod(in.y, amount)
-                    );
-}
-
-float mag(vector2 in){
-    return length(vector(in.x, in.y, 0));
-}
-
-vector2 difference(vector2 fg, vector2 bg)
-{
-    return vector2 (difference(fg.x, bg.x),
-                    difference(fg.y, bg.y)
-                    );
+    return length(vector(a.x, a.y, 0));
 }
 
 vector2 rotate2d(vector2 in, float amount, vector2 center)
 {
-    vector2 out;
-    out.x = out.x - center.x;
-    out.y = out.y - center.y;
+    vector2 out = in - center;
     out.x = in.x*cos(amount) - in.y*sin(amount);
     out.y = in.y*cos(amount) + in.x*sin(amount);
-    out.x = out.x+center.x;
-    out.y = out.y+center.y;
+    out = out + center;
     return out;
 }
 

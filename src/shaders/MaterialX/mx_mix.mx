@@ -15,5 +15,5 @@ shader SHADER_NAME(mx_mix)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    out = mix(fg, bg, mask); 
+    out = mix(bg, fg, mask); 
 }

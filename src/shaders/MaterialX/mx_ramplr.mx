@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_ramplr)
+shader SHADER_NAME(mx_ramplr)
     [[ string help = "linear value ramp source, left to right" ]]
   (
     TYPE valuel = TYPE_ZERO

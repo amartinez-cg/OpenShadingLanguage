@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_ambientocclusion)
+shader SHADER_NAME(mx_ambientocclusion)
     [[ string help = "Computes the ambient occlusion (0-1 float) at the current surface point." ]]
   (
     float coneangle = 90,
@@ -15,7 +14,6 @@ SHADER_NAME(mx_ambientocclusion)
     output float out = 0
   )
 {
-    
     // This node is a stub and does not currently operate to specification
     out = 0;
 }

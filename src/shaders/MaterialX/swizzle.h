@@ -30,9 +30,15 @@ TYPE swizzle(float in[4], string expression){
         else if(ch == "b" || ch == "z"){
             outF[i] = in[2];
         }
+#if defined(COLOR2)
+        else if(ch == "a"){
+            outF[i] = in[1];
+        }
+#else        
         else if(ch == "a" || ch == "w"){
             outF[i] = in[3];
         }
+#endif
         else if(ch == "1" ){
             outF[i] = 1;
         }
@@ -48,7 +54,7 @@ TYPE swizzle(float in[4], string expression){
         out = vector(outF[0],outF[1],outF[2]);
     #elif defined(COLOR2) 
         out.r = outF[0];
-        out.g = outF[1];
+        out.a = outF[1];
     #elif defined(COLOR4)
         out.rgb = color(outF[0],outF[1],outF[2]);
         out.a = outF[3];

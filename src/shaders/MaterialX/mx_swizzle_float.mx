@@ -7,8 +7,7 @@
 #include "mx_types.h"
 #include "swizzle.h"
 
-shader
-SHADER_NAME(mx_swizzle_float)
+shader SHADER_NAME(mx_swizzle_float)
     [[ string help = "Perform an arbitrary permutation of the channels of the input stream" ]]
   (
     float in = 0,

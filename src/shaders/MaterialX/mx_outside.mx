@@ -8,7 +8,7 @@
 
 shader SHADER_NAME(mx_outside)
     [[ string help = TYPE_STR" Take one 1-4 channel input in plus a separate float mask input and apply the same \
-    operator to all channels: in * (1-mask) " ]]
+                     operator to all channels: in * (1-mask) " ]]
   (
     TYPE in = TYPE_DEFAULT_IN,
     float mask = 1,

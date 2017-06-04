@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_rotate2d)
+shader SHADER_NAME(mx_rotate2d)
     [[ string help = "Rotates a vector2 value about a center point in 2D pattern space." ]]
   (
     TYPE in = TYPE_ZERO,

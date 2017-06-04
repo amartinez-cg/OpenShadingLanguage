@@ -5,6 +5,7 @@
 // http://www.materialx.org/
 
 #include "mx_types.h"
+#include "mx_globals.h"
 
 shader
 SHADER_NAME(mx_saturate)
@@ -12,8 +13,17 @@ SHADER_NAME(mx_saturate)
   (
     TYPE in = TYPE_ZERO,
     float amount = 1,
+    color lumacoeffs = LUMINANCE_COEFFICIENTS,
     output TYPE out = TYPE_ZERO
   )
 {
-    out = saturate(in, amount);
+    color lum = dot(in, lumacoeffs);
+
+#if defined(COLOR4)
+    out = color4(lum, in.a);
+#else
+    out = lum;
+#endif
+
+    out = mix(out, in, amount);
 }

@@ -13,5 +13,5 @@ shader SHADER_NAME(mx_dot)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-     out = in; 
+    out = in; 
 }

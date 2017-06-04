@@ -15,5 +15,5 @@ shader SHADER_NAME(mx_scale)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    out = vscale(in, amount, center);
+    out = ((in - center) / amount) + center;
 }

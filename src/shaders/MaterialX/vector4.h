@@ -27,12 +27,22 @@ vector4 __operator__add__(vector4 a, vector4 b)
 
 vector4 __operator__add__(vector4 a, int b)
 {
-    return a + vector4(a.x + b, a.y + b, a.z + b, a.w + b);
+    return a + vector4(b, b, b, b);
 }
 
 vector4 __operator__add__(vector4 a, float b)
 {
-    return a + vector4(a.x + b, a.y + b, a.z + b, a.w + b);
+    return a + vector4(b, b, b, b);
+}
+
+vector4 __operator__add__(int a, vector4 b)
+{
+    return vector4(a, a, a, a) + b;
+}
+
+vector4 __operator__add__(float a, vector4 b)
+{
+    return vector4(a, a, a, a) + b;
 }
 
 vector4 __operator__sub__(vector4 a, vector4 b)
@@ -42,12 +52,22 @@ vector4 __operator__sub__(vector4 a, vector4 b)
 
 vector4 __operator__sub__(vector4 a, int b)
 {
-    return a + vector4(a.x - b, a.y - b, a.z - b, a.w - b);
+    return a - vector4(b, b, b, b);
 }
 
 vector4 __operator__sub__(vector4 a, float b)
 {
-    return a + vector4(a.x - b, a.y - b, a.z - b, a.w - b);
+    return a - vector4(b, b, b, b);
+}
+
+vector4 __operator__sub__(int a, vector4 b)
+{
+    return vector4(a, a, a, a) - b;
+}
+
+vector4 __operator__sub__(float a, vector4 b)
+{
+    return vector4(a, a, a, a) - b;
 }
 
 vector4 __operator__mul__(vector4 a, vector4 b)
@@ -57,12 +77,22 @@ vector4 __operator__mul__(vector4 a, vector4 b)
 
 vector4 __operator__mul__(vector4 a, int b)
 {
-    return a + vector4(a.x * b, a.y * b, a.z * b, a.w * b);
+    return a * vector4(b, b, b, b);
 }
 
 vector4 __operator__mul__(vector4 a, float b)
 {
-    return a + vector4(a.x * b, a.y * b, a.z * b, a.w * b);
+    return a * vector4(b, b, b, b);
+}
+
+vector4 __operator__mul__(int a, vector4 b)
+{
+    return vector4(a, a, a, a) * b;
+}
+
+vector4 __operator__mul__(float a, vector4 b)
+{
+    return vector4(a, a, a, a) * b;
 }
 
 vector4 __operator__div__(vector4 a, vector4 b)
@@ -73,13 +103,23 @@ vector4 __operator__div__(vector4 a, vector4 b)
 vector4 __operator__div__(vector4 a, int b)
 {
     float b_inv = 1/b;
-    return a + vector4(a.x * b_inv, a.y * b_inv, a.z * b_inv, a.w * b_inv);
+    return a * vector4(b_inv, b_inv, b_inv, b_inv);
 }
 
 vector4 __operator__div__(vector4 a, float b)
 {
     float b_inv = 1/b;
-    return a + vector4(a.x * b_inv, a.y * b_inv, a.z * b_inv, a.w * b_inv);
+    return a * vector4(b_inv, b_inv, b_inv, b_inv);
+}
+
+vector4 __operator__div__(int a, vector4 b)
+{
+    return vector4(a, a, a, a) / b;
+}
+
+vector4 __operator__div__(float a, vector4 b)
+{
+    return vector4(a, a, a, a) / b;
 }
 
 int __operator__eq__(vector4 a, vector4 b)
@@ -127,9 +167,9 @@ vector vec4ToVec3(vector4 v)
                   v.z * s);
 }
 
-float dot(vector4 in1, vector4 in2)
+float dot(vector4 a, vector4 b)
 {
-    return (in1.x*in2.x + in1.y*in2.y + in1.z*in2.z + in1.w*in2.w);
+    return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w));
 }
 
 
@@ -191,29 +231,6 @@ vector4 fgamma(vector4 in, float g)
                     );
 }
 
-vector4 invert(vector4 in, vector4 amount)
-{
-    return vector4 (amount.x - in.x,
-                    amount.y - in.y,
-                    amount.z - in.z,
-                    amount.w - in.w
-                    );
-}
-
-vector4 invert(vector4 in, float amount)
-{
-    return vector4 (amount - in.x,
-                    amount - in.y,
-                    amount - in.z,
-                    amount - in.w
-                    );
-}
-
-vector4 invert(vector4 in)
-{
-    return invert(in, 1.0);
-}
-
 vector4 clamp(vector4 in, vector4 low, vector4 high)
 {
     return vector4 (clamp(in.x, low.x, high.x),
@@ -262,85 +279,59 @@ vector4 exponent(vector4 in, vector4 amount)
 
 vector4 exponent(vector4 in, float amount)
 {
-    return vector4 (exponent(in.x, amount),
-                    exponent(in.y, amount),
-                    exponent(in.z, amount),
-                    exponent(in.w, amount)
-                    );
+    return exponent(in, vector4(amount, amount, amount, amount));
 }
 
 
-vector4 max(vector4 in, vector4 amount)
+vector4 max(vector4 a, vector4 b)
 {
-    return vector4 (max(in.x, amount.x),
-                    max(in.y, amount.y),
-                    max(in.z, amount.z),
-                    max(in.w, amount.w)
+    return vector4 (max(a.x, b.x),
+                    max(a.y, b.y),
+                    max(a.z, b.z),
+                    max(a.w, b.w)
                     );
 }
 
-vector4 max(vector4 in, float amount)
+vector4 max(vector4 a, float b)
 {
-    return vector4 (max(in.x, amount),
-                    max(in.y, amount),
-                    max(in.z, amount),
-                    max(in.w, amount)
-                    );
+    return max(a, vector4(b, b, b, b));
 }
 
-vector4 normalize(vector4 in)
+vector4 normalize(vector4 a)
 {
-    vector v = normalize(vec4ToVec3(in));
+    vector v = normalize(vec4ToVec3(a));
     return vector4 (v[0], v[1], v[2], 1.0 );
 }
 
-vector4 min(vector4 in, vector4 amount)
+vector4 min(vector4 a, vector4 b)
 {
-    return vector4 (min(in.x, amount.x),
-                    min(in.y, amount.y),
-                    min(in.z, amount.z),
-                    min(in.w, amount.w)
+    return vector4 (min(a.x, b.x),
+                    min(a.y, b.y),
+                    min(a.z, b.z),
+                    min(a.w, b.w)
                     );
 }
 
-vector4 min(vector4 in, float amount)
+vector4 min(vector4 a, float b)
 {
-    return vector4 (min(in.x, amount),
-                    min(in.y, amount),
-                    min(in.z, amount),
-                    min(in.w, amount)
-                    );
+    return min(a, vector4(b, b, b, b));
 }
 
-vector4 fmod(vector4 in, vector4 amount)
+vector4 fmod(vector4 a, vector4 b)
 {
-    return vector4 (fmod(in.x, amount.x),
-                    fmod(in.y, amount.y),
-                    fmod(in.z, amount.z),
-                    fmod(in.w, amount.w)
-                    );
+    return vector4 (fmod(a.x, b.x),
+                    fmod(a.y, b.y),
+                    fmod(a.z, b.z),
+                    fmod(a.w, b.w));
 }
 
-vector4 fmod(vector4 in, float amount)
+vector4 fmod(vector4 a, float b)
 {
-    return vector4 (fmod(in.x, amount),
-                    fmod(in.y, amount),
-                    fmod(in.z, amount),
-                    fmod(in.w, amount)
-                    );
+    return fmod(a, vector4(b, b, b, b));
 }
 
-float mag(vector4 in)
+float magnitude(vector4 a)
 {
-    return length(vector(in.x/in.w, in.y/in.w, in.z/in.w));
-}
-
-vector4 difference(vector4 fg, vector4 bg)
-{
-    return vector4 (difference(fg.x, bg.x),
-                    difference(fg.y, bg.y),
-                    difference(fg.z, bg.z),
-                    difference(fg.w, bg.w)
-                    );
+    return length(vector(a.x, a.y, a.z) * (1 / a.w));
 }
 

@@ -6,13 +6,12 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_position)
+shader SHADER_NAME(mx_position)
     [[ string help = "The geometric position" ]]
   (
     string space = "object",
     output point out = 0
   )
 {
-    out = transform( space, P );
+    out = transform(space, P);
 }

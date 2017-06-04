@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_heighttonormal)
+shader SHADER_NAME(mx_heighttonormal)
     [[ string help = " Convert a scalar height map to a normal map of type vector3." ]]
   (
     float in = 0,

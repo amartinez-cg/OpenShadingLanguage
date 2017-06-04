@@ -6,15 +6,12 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_geomattrvalue)
+shader SHADER_NAME(mx_geomattrvalue)
     [[ string help = "The value assigned to the current geometry through the specified geomattr name" ]]
   (
     string attrname = "",
-    output TYPE out = TYPE_DEFAULT_OUT
+    output TYPE out = TYPE_ZERO
   )
 {
-    TYPE attr = TYPE_ZERO;
-    getattribute(attrname, attr);
-    out = attr;
+    getattribute(attrname, out);
 }

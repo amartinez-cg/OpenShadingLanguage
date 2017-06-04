@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_smoothstep_float)
+shader SHADER_NAME(mx_smoothstep_float)
     [[ string help = "outputs a smooth (hermite-interpolated) remapping of input values from low-high to output 0-1."  ]]
   (
     TYPE in = TYPE_ZERO

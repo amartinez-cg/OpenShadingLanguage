@@ -6,13 +6,12 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_normal)
+shader SHADER_NAME(mx_normal)
     [[ string help = "The geometric normal associated" ]]
   (
     string space = "object",
     output vector out = 0
   )
 {
-    out = transform( space, N );
+    out = transform(space, N);
 }

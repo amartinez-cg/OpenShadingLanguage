@@ -8,12 +8,12 @@
 
 shader SHADER_NAME(mx_disjointover)
     [[ string help = TYPE_STR" Take two color2 or two color4 inputs and use the built-in alpha \
-                                channel(s) to control the compositing of the fg and bg inputs" ]]
+                               channel(s) to control the compositing of the fg and bg inputs" ]]
   (
     TYPE fg = TYPE_DEFAULT_IN,
     TYPE bg = TYPE_DEFAULT_IN,
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    out =  disjointover(fg, bg); 
+    out = disjointover(fg, bg); 
 }

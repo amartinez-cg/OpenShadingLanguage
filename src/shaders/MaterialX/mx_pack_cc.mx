@@ -6,16 +6,15 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_pack_cc)
+shader SHADER_NAME(mx_pack_cc)
     [[ string help = "Pack the channels from two, three or four streams into the same number of channels of a \
-    single stream of a specified compatible type;" ]]
+                      single stream of a specified compatible type;" ]]
   (
     color2 in1 = {0,0},
     color2 in2 = {0,0},
     output color4 out = {color(0), 0}
   )
 {
-    out.rgb = color(in1.r, in1.g, in2.r);
-    out.a = in2.g;
+    out.rgb = color(in1.r, in1.a, in2.r);
+    out.a = in2.a;
 }

@@ -6,14 +6,11 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_geomcolor)
+shader SHADER_NAME(mx_geomcolor)
     [[ string help = "The color associated with the current geometry " ]]
   (
-    output TYPE out = TYPE_DEFAULT_OUT
+    output TYPE out = TYPE_ZERO
   )
 {
-    TYPE attr;
-    getattribute("color", attr);
-    out = attr;
+    getattribute("color", out);
 }

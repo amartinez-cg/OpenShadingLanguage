@@ -5,9 +5,10 @@
 // http://www.materialx.org/
 
 #include "mx_types.h"
+#include "mx_globals.h"
 
-shader
-SHADER_NAME(mx_splittb)
+
+shader SHADER_NAME(mx_splittb)
     [[ string help = "split top/bottom"  ]]
   (
     TYPE valuet = TYPE_ZERO
@@ -22,5 +23,15 @@ SHADER_NAME(mx_splittb)
     output TYPE out = TYPE_ZERO
   )
 {
-    out = mix (valuet, valueb, aastep (center, texcoord.y));
+    float t = texcoord.y;
+
+#ifdef FLIP_V
+    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
+    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
+    if (!isconnected(texcoord)){
+        t = t - 1;
+    }
+#endif 
+
+    out = mix(valuet, valueb, aastep (center, t));
 }

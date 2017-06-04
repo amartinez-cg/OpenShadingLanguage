@@ -16,5 +16,4 @@ shader SHADER_NAME(mx_contrast_float)
   )
 {
     out = contrast(in, amount, pivot); 
-
 }
