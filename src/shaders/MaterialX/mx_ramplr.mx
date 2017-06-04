@@ -11,11 +11,14 @@ shader SHADER_NAME(mx_ramplr)
   (
     TYPE valuel = TYPE_ZERO
         [[  string help = "value at the left (s=0) edge"  ]],
+
     TYPE valuer = TYPE_ONE
         [[  string help = "value at the right (s=1) edge"  ]],
+
     vector2 texcoord = { u, v }
         [[  string help = "input coordinate position",
             int lockgeom = 0 ]],
+            
     output TYPE out = TYPE_ZERO
   )
 {

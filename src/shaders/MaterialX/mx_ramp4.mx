@@ -7,7 +7,6 @@
 #include "mx_types.h"
 #include "mx_globals.h"
 
-
 shader SHADER_NAME(mx_ramp4)
     [[ string help = "linear value ramp source, top to bottom" ]]
   (

@@ -5,7 +5,6 @@
 // http://www.materialx.org/
 
 #include "mx_types.h"
-#include "oslutil.h"
 
 shader SHADER_NAME(mx_noise3d)
     [[ string help = "3D noise"  ]]
