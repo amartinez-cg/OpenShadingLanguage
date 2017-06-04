@@ -286,8 +286,8 @@ float magnitude(vector2 a)
 vector2 rotate2d(vector2 in, float amount, vector2 center)
 {
     vector2 out = in - center;
-    out.x = in.x*cos(amount) - in.y*sin(amount);
-    out.y = in.y*cos(amount) + in.x*sin(amount);
+    out.x = in.x * cos(amount) - in.y * sin(amount);
+    out.y = in.y * cos(amount) + in.x * sin(amount);
     out = out + center;
     return out;
 }

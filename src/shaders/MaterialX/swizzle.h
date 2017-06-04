@@ -64,7 +64,7 @@ TYPE swizzle(float in[4], string expression){
     #elif defined(VECTOR4)
         out.x = outF[0];
         out.y = outF[1];
-        out.z =    outF[2];
+        out.z = outF[2];
         out.w = outF[3];
     #endif
     
