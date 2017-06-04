@@ -14,15 +14,5 @@ shader SHADER_NAME(mx_screen)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-
-#define FAIL
-#ifndef FAIL
-    TYPE fg_inv = invert(fg);
-    TYPE bg_inv = invert(bg);
-    TYPE product = fg_inv * bg_inv;
-
-    out =  invert(product); 
-#else
-    out =  invert(invert(fg) * invert(bg)); 
-#endif    
+    out = 1 - (1 - fg) * (1 - bg); 
 }

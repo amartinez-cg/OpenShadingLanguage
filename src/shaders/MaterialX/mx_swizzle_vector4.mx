@@ -7,11 +7,10 @@
 #include "mx_types.h"
 #include "swizzle.h"
 
-shader
-SHADER_NAME(mx_swizzle_vector4)
+shader SHADER_NAME(mx_swizzle_vector4)
     [[ string help = "Perform an arbitrary permutation of the channels of the input stream" ]]
   (
-    vector4 in = {0,0,0,0},
+    vector4 in = {0, 0, 0, 0},
     string channels = "xyzw",
     output TYPE out = TYPE_ZERO
   )

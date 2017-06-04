@@ -7,19 +7,22 @@
 #include "mx_types.h"
 #include "oslutil.h"
 
-shader
-SHADER_NAME(mx_noise3d)
+shader SHADER_NAME(mx_noise3d)
     [[ string help = "3D noise"  ]]
   (
     point position = transform ("object", P)
         [[  string help = "input coordinate position (default: object space P)",
             int lockgeom = 0 ]],
+
     TYPE amplitude = TYPE_ONE
         [[  string help = "center-to-peak amplitude of the noise" ]],
+
     float pivot = 0
         [[  string help = "the center value of the output noise" ]],
+
     string noisetype = "snoise"
         [[  string help = "type of noise" ]],
+        
     output TYPE out = TYPE_ZERO,
   )
 {
@@ -32,7 +35,7 @@ SHADER_NAME(mx_noise3d)
         out = pivot + cnoise * amplitude;
     #elif defined(COLOR2)
         out.r = pivot + cnoise[0] * amplitude.r;
-        out.g = pivot + cnoise[1] * amplitude.g;
+        out.a = pivot + cnoise[1] * amplitude.a;
     #elif defined(COLOR4)
         out.rgb = pivot + cnoise * amplitude.rgb;
         out.a = pivot + fnoise * amplitude.a;

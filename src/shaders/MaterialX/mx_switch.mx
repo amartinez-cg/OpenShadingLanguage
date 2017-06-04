@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_switch)
+shader SHADER_NAME(mx_switch)
     [[ string help = "Pass on the value of one of five input streams, according to the value of a selector parameter." ]]
   (
     TYPE in1 = TYPE_ZERO,
@@ -19,18 +18,17 @@ SHADER_NAME(mx_switch)
     output TYPE out = TYPE_ZERO
   )
 {
-    int selection = int(clamp(floor(which), 0, 4));
+    int selection = int(clamp(floor(which) + 1, 1, 5));
     
-    if( selection == 0 ){
+    if( selection == 1 ){
         out = in1;
-    } else if (selection == 1){
-        out = in2;
     } else if (selection == 2){
-        out = in3;
+        out = in2;
     } else if (selection == 3){
-        out = in4;
+        out = in3;
     } else if (selection == 4){
+        out = in4;
+    } else if (selection == 5){
         out = in5;
     }
-
 }

@@ -7,25 +7,38 @@
 #include "mx_types.h"
 #include "oslutil.h"
 
-shader
-SHADER_NAME(mx_noise2d)
+shader SHADER_NAME(mx_noise2d)
     [[ string help = "2D noise"  ]]
   (
     vector2 texcoord = { u, v }
         [[  string help = "input coordinate position",
             int lockgeom = 0 ]],
+
     TYPE amplitude = TYPE_ONE
         [[  string help = "center-to-peak amplitude of the noise" ]],
+
     float pivot = 0
         [[  string help = "the center value of the output noise" ]],
+
     string noisetype = "snoise"
         [[  string help = "type of noise" ]],
+        
     output TYPE out = TYPE_ZERO
   )
 {
-    
-    float fnoise = (float) noise (noisetype, texcoord.x, texcoord.y);
-    color cnoise = (color) noise (noisetype, texcoord.x, texcoord.y);
+    float s = texcoord.x;
+    float t = texcoord.y;
+
+    #ifdef FLIP_V
+    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
+    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
+    if (!isconnected(texcoord)){
+        t = t - 1;
+    }
+    #endif 
+
+    float fnoise = (float) noise (noisetype, s, t);
+    color cnoise = (color) noise (noisetype, s, t);
 
     #if defined(FLOAT)
         out = pivot + fnoise * amplitude;
@@ -33,7 +46,7 @@ SHADER_NAME(mx_noise2d)
         out = pivot + cnoise * amplitude;
     #elif defined(COLOR2)
         out.r = pivot + cnoise[0] * amplitude.r;
-        out.g = pivot + cnoise[1] * amplitude.g;
+        out.a = pivot + cnoise[1] * amplitude.a;
     #elif defined(COLOR4)
         out.rgb = pivot + cnoise * amplitude.rgb;
         out.a = pivot + fnoise * amplitude.a;

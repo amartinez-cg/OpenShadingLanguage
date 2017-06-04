@@ -6,13 +6,12 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_tangent)
+shader SHADER_NAME(mx_tangent)
     [[ string help = "The geometric tangent vector" ]]
   (
     string space = "object",
     output vector out = 0
   )
 {
-    out = transform( space, dPdu );
+    out = transform(space, dPdu);
 }

@@ -5,19 +5,23 @@
 // http://www.materialx.org/
 
 #include "mx_types.h"
+#include "mx_globals.h"
 
-shader
-SHADER_NAME(mx_texcoord)
+shader SHADER_NAME(mx_texcoord)
     [[ string help = " The 2D texture coordinates" ]]
   (
     output TYPE out = TYPE_ZERO
   )
 {
-#if defined(VECTOR2)
-    vector2 out_value = {u, v};
-#elif defined(VECTOR)
-    vector out_value = vector(u, v, 0);
-#endif
 
-    out = out_value;
+    float t = v;
+#if defined(FLIP_V)
+    t = 1 - t;
+#endif
+    
+#if defined(VECTOR2)
+    out = vector2(u, t);
+#elif defined(VECTOR)
+    out = vector(u, t, 0);
+#endif
 }

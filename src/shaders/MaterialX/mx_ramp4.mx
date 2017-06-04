@@ -5,9 +5,10 @@
 // http://www.materialx.org/
 
 #include "mx_types.h"
+#include "mx_globals.h"
 
-shader
-SHADER_NAME(mx_ramp4)
+
+shader SHADER_NAME(mx_ramp4)
     [[ string help = "linear value ramp source, top to bottom" ]]
   (
     TYPE valuetl = TYPE_ZERO
@@ -24,8 +25,19 @@ SHADER_NAME(mx_ramp4)
     output TYPE out = TYPE_ZERO
   )
 {
-    float ss = clamp (texcoord.x, 0, 1);
-    float tt = clamp (texcoord.y, 0, 1);
+    float s = texcoord.x;
+    float t = texcoord.y;
+
+    #ifdef FLIP_V
+    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
+    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
+    if (!isconnected(texcoord)){
+        t = t - 1;
+    }
+    #endif
+
+    float ss = clamp (s, 0, 1);
+    float tt = clamp (t, 0, 1);
     out = mix ( mix(valuetl, valuetr, ss),
                 mix(valuebl, valuebr, ss), 
                 tt);

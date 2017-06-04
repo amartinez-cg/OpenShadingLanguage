@@ -8,8 +8,8 @@
 
 shader SHADER_NAME(mx_modulo_float)
     [[ string help = TYPE_STR" The remaining fraction after dividing the incoming \
-    float/color/vector by the constant amount and subtracting the integer portion.\
-    The modula amount cannot be 0." ]]
+                     float/color/vector by the constant amount and subtracting the integer portion.\
+                     The modula amount cannot be 0." ]]
   (
     TYPE in1 = TYPE_DEFAULT_IN,
     float in2 = 1.0,

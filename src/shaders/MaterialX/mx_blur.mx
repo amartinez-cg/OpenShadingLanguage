@@ -6,8 +6,7 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_blur)
+shader SHADER_NAME(mx_blur)
     [[ string help = "A gaussian-falloff blur." ]]
   (
     TYPE in = TYPE_ZERO,

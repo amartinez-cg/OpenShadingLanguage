@@ -6,20 +6,32 @@
 
 #include "oslutil.h"
 #include "mx_types.h"
+#include "mx_globals.h"
 
-shader
-SHADER_NAME(mx_cellnoise2d)
-    [[ string help = "2D cell noise in 1 channel"  ]]
+shader SHADER_NAME(mx_cellnoise2d)
+    [[ string help = "2D cell noise in 1 channel" ]]
   (
-    vector2 texcoord = { u, v }
+    vector2 texcoord = {u, v}
         [[  string help = "input coordinate position",
             int lockgeom = 0 ]],
+            
     output TYPE out = TYPE_ZERO
   )
 {
-    float fnoise = (float) cellnoise (texcoord.x, texcoord.y);
+    float s = texcoord.x;
+    float t = texcoord.y;
 
-    color cnoise = (color) cellnoise (texcoord.x, texcoord.y);
+    #ifdef FLIP_V
+    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
+    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
+    if (!isconnected(texcoord)){
+        t = t - 1;
+    }
+    #endif
+
+    float fnoise = (float) cellnoise (s, t);
+
+    color cnoise = (color) cellnoise (s, t);
 
     #if defined(FLOAT)
         out = fnoise;

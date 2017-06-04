@@ -6,14 +6,11 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_time)
+shader SHADER_NAME(mx_time)
     [[ string help = "The current time in seconds as defined by the host environment." ]]
   (
     output float out = 0
   )
 {
-    float t;
-    getattribute("time", t);
-    out = t;
+    getattribute("time", out);
 }

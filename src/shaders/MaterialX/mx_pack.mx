@@ -7,10 +7,9 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_pack)
+shader SHADER_NAME(mx_pack)
     [[ string help = "Pack the channels from two, three or four streams into the same number of channels of a \
-    single stream of a specified compatible type;" ]]
+                      single stream of a specified compatible type;" ]]
   (
     
     float in1 = 0,
@@ -28,7 +27,7 @@ SHADER_NAME(mx_pack)
         out = vector(in1, in2, in3);
     #elif defined(COLOR2)
         out.r = in1;
-        out.g = in2;
+        out.a = in2;
     #elif defined(VECTOR2)
         out.x = in1;
         out.y = in2;

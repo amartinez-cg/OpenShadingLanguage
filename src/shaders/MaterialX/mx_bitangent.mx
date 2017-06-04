@@ -6,13 +6,12 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_bitangent)
+shader SHADER_NAME(mx_bitangent)
     [[ string help = "The geometric bitangent vector in a specific coordinate space." ]]
   (
     string space = "object",
     output vector out = 0
   )
 {
-    out = transform( space, dPdv );
+    out = transform(space, dPdv);
 }

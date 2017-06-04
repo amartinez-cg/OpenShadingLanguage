@@ -6,10 +6,9 @@
 
 #include "mx_types.h"
 
-shader
-SHADER_NAME(mx_pack_vf)
+shader SHADER_NAME(mx_pack_vf)
     [[ string help = "Pack the channels from two, three or four streams into the same number of channels of a \
-    single stream of a specified compatible type;" ]]
+                      single stream of a specified compatible type;" ]]
   (
     vector in1 = 0,
     float in2 = 0,
