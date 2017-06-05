@@ -5,7 +5,6 @@
 // http://www.materialx.org/
 
 #include "mx_types.h"
-#include "mx_globals.h"
 
 shader SHADER_NAME(mx_image)
     [[ string help = "Texture lookup" ]]
@@ -42,16 +41,6 @@ shader SHADER_NAME(mx_image)
   )
 {
     out = default_value;
-    float s = texcoord.x;
-    float t = texcoord.y;
-
-    #ifdef FLIP_V
-    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
-    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
-    if (!isconnected(texcoord)){
-        t = t - 1;
-    }
-    #endif
 
     #if defined(COLOR) || defined(VECTOR) || defined(FLOAT)
         color missingColor = default_value;   
@@ -71,7 +60,7 @@ shader SHADER_NAME(mx_image)
     #endif
 
     float alpha;
-    color rgb = texture(file, s, t, "alpha", alpha, "subimage", layer,
+    color rgb = texture(file, texcoord.x, texcoord.y, "alpha", alpha, "subimage", layer,
                         "missingcolor", missingColor, "missingalpha", missingAlpha);
 
     #if defined(COLOR) || defined(VECTOR)
