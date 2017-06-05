@@ -36,7 +36,9 @@ shader SHADER_NAME(mx_fractal3d_fa)
     // optimize away all the computations leading to any output that isn't
     // connected to anything downstream in the shader network.
 
-    float fnoise = (float) fBm(position, octaves, lacunarity, diminish, noisetype);
+    //float noise(P) is equal to the red channel of color noise(P)
+    //so we offset the float noise lookup to make them different.
+    float fnoise = (float) fBm(position + point(19, 193, 17), octaves, lacunarity, diminish, noisetype);
 
     color cnoise = (color) fBm(position, octaves, lacunarity, diminish, noisetype);
     

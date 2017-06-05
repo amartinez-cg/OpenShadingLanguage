@@ -25,19 +25,11 @@ shader SHADER_NAME(mx_noise2d)
     output TYPE out = TYPE_ZERO
   )
 {
-    float s = texcoord.x;
-    float t = texcoord.y;
-
-    #ifdef FLIP_V
-    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
-    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
-    if (!isconnected(texcoord)){
-        t = t - 1;
-    }
-    #endif 
-
-    float fnoise = (float) noise (noisetype, s, t);
-    color cnoise = (color) noise (noisetype, s, t);
+    //float noise(P) is equal to the red channel of color noise(P)
+    //so we offset the float noise lookup to make them different.
+    float fnoise = (float) noise (noisetype, texcoord.x + 19, texcoord.y + 73);
+    
+    color cnoise = (color) noise (noisetype, texcoord.x, texcoord.y);
 
     #if defined(FLOAT)
         out = pivot + fnoise * amplitude;
