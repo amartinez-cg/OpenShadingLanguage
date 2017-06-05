@@ -22,7 +22,14 @@ SHADER_TYPES = {
     'COLOR4': 'color4',
     'VECTOR': 'vector',
     'VECTOR2': 'vector2',
-    'VECTOR4': 'vector4'
+    'VECTOR4': 'vector4',
+    'SURFACESHADER': 'closure color',
+    'MATRIX44': 'matrix',
+    'MATRIX33': 'matrix',
+    'STRING': 'string',
+    'FILENAME': 'string',
+    'BOOL': 'bool',
+    'INT': 'int',
 }
 
 ALL_TYPES = ['FLOAT', 'COLOR', 'COLOR2', 'COLOR4', 'VECTOR', 'VECTOR2', 'VECTOR4']
@@ -97,8 +104,8 @@ BUILD_DICT = {
     'mx_pack': ['COLOR', 'COLOR2', 'COLOR4', 'VECTOR', 'VECTOR2', 'VECTOR4'],
     'mx_pack_cf': ['COLOR4'],
     'mx_pack_cc': ['COLOR4'],
-    'mx_pack_vf': ['COLOR4'],
-    'mx_pack_vv': ['COLOR4'],
+    'mx_pack_vf': ['VECTOR4'],
+    'mx_pack_vv': ['VECTOR4'],
     'mx_position': ['VECTOR'],
     'mx_premult': ['COLOR', 'COLOR2', 'COLOR4'],
     'mx_ramp4': ALL_TYPES,
