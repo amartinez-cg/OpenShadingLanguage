@@ -1,0 +1,34 @@
+// Open Shading Language : Copyright (c) 2009-2017 Sony Pictures Imageworks Inc., et al.
+// https://github.com/imageworks/OpenShadingLanguage/blob/master/LICENSE
+// 
+// MaterialX specification (c) 2017 Lucasfilm Ltd. 
+// http://www.materialx.org/
+
+#include "mx_types.h"
+#include "mx_globals.h"
+
+shader SHADER_NAME(mx_ramptb)
+    [[ string help = "linear value ramp source, top to bottom" ]]
+  (
+    TYPE valuet = TYPE_ZERO
+        [[  string help = "value at the top (t=0) edge"  ]],
+    TYPE valueb = TYPE_ONE
+        [[  string help = "value at the bottom (t=1) edge"  ]],
+    vector2 texcoord = { u, v }
+        [[  string help = "input coordinate position",
+            int lockgeom = 0 ]],
+    output TYPE out = TYPE_ZERO
+  )
+{
+    float t = texcoord.y;
+
+    #ifdef FLIP_V
+    //if we are flipping v and texcoord is not connected then we need to flip the v value here,
+    //otherwise we assume the incoming value has already been flipped (this is handled in the mx_texcoord node)
+    if (!isconnected(texcoord)){
+        t = t - 1;
+    }
+    #endif
+
+    out = mix (valuet, valueb, clamp(t, 0, 1) );
+}
