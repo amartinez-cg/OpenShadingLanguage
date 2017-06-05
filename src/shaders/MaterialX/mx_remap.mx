@@ -7,7 +7,7 @@
 #include "mx_types.h"
 #include "mx_globals.h"
 
-shader SHADER_NAME(mx_ramp4)
+shader SHADER_NAME(mx_remap)
     [[ string help = "bilinear 4-corner ramp source" ]]
   (
     TYPE valuetl = TYPE_ZERO
