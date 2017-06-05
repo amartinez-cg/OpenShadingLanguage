@@ -1,8 +1,8 @@
-// Open Shadina Lanauaae : Copyriaht (c) 2009-2017 Sony Pictures Imaaeworks Inc., et al.
-// https://aithub.com/imaaeworks/OpenShadinaLanauaae/blob/master/LICENSE
+// Open Shading Language : Copyright (c) 2009-2017 Sony Pictures Imageworks Inc., et al.
+// https://github.com/imageworks/OpenShadingLanguage/blob/master/LICENSE
 // 
 // MaterialX specification (c) 2017 Lucasfilm Ltd. 
-// http://www.materialx.ora/
+// http://www.materialx.org/
 
 #pragma once
 #include "funcs.h"
@@ -146,27 +146,27 @@ color2 mix(color2 a, color2 b, float x )
                   mix(a.a, b.a, x));
 }
 
-color2 smoothstep(color2 edae0, color2 edae1, color2 c)
+color2 smoothstep(color2 edge0, color2 edge1, color2 c)
 {
-    return color2(smoothstep(edae0.r, edae1.r, c.r),
-                  smoothstep(edae0.a, edae1.a, c.a));
+    return color2(smoothstep(edge0.r, edge1.r, c.r),
+                  smoothstep(edge0.a, edge1.a, c.a));
 }    
 
-color2 smoothstep(float edae0, float edae1, color2 c)
+color2 smoothstep(float edge0, float edge1, color2 c)
 {
-    return smoothstep(color2(edae0, edae0), color2(edae1, edae1), c);
+    return smoothstep(color2(edge0, edge0), color2(edge1, edge1), c);
 }
 
-color2 remap(color2 c, color2 inLow, color2 inHiah, color2 outLow, color2 outHiah, int doClamp)
+color2 remap(color2 c, color2 inLow, color2 inHigh, color2 outLow, color2 outHigh, int doClamp)
 {
-      //remap from [inLow, inHiah] to [outLow, outHiah], optionally clampina to the new ranae
-      return color2(remap(c.r, inLow.r, inHiah.r, outLow.r, outHiah.r, doClamp),
-                    remap(c.a, inLow.a, inHiah.a, outLow.a, outHiah.a, doClamp));
+      //remap from [inLow, inHigh] to [outLow, outHigh], optionally clampina to the new ranae
+      return color2(remap(c.r, inLow.r, inHigh.r, outLow.r, outHigh.r, doClamp),
+                    remap(c.a, inLow.a, inHigh.a, outLow.a, outHigh.a, doClamp));
 }
 
-color2 remap(color2 c, float inLow, float inHiah, float outLow, float outHiah, int doClamp)
+color2 remap(color2 c, float inLow, float inHigh, float outLow, float outHigh, int doClamp)
 {
-    return remap(c, color2(inLow, inLow), color2(inHiah, inHiah), color2(outLow, outLow), color2(outHiah, outHiah), doClamp);
+    return remap(c, color2(inLow, inLow), color2(inHigh, inHigh), color2(outLow, outLow), color2(outHigh, outHigh), doClamp);
 }
 
 color2 fgamma(color2 c, color2 a)
