@@ -165,9 +165,9 @@
 #error Invalid or no Type specified in compile flags
 #endif
 
-#include "funcs.h"
 #include "vector2.h"
 #include "vector4.h"
 #include "color2.h"
 #include "color4.h"
+#include "mx_funcs.h"
 
