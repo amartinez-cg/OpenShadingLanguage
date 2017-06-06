@@ -132,6 +132,7 @@ endforeach ()
     osl_compile (mx_dot.mx FILENAME shader_objs shader_headers)
     osl_compile (mx_dot.mx BOOL shader_objs shader_headers)
     osl_compile (mx_dot.mx INT shader_objs shader_headers)
+    osl_compile (mx_dot.mx SURFACESHADER shader_objs shader_headers)
     
     osl_compile (mx_geomattrvalue.mx INT shader_objs shader_headers)
     osl_compile (mx_geomattrvalue.mx BOOL shader_objs shader_headers)
