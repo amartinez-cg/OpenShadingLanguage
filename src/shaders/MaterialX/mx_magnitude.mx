@@ -13,5 +13,5 @@ shader SHADER_NAME(mx_magnitude)
     output float out = 0
   )
 {
-    out = magnitude(in);
+    out = length(in);
 }

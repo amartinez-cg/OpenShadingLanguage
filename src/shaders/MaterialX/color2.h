@@ -5,13 +5,20 @@
 // http://www.materialx.org/
 
 #pragma once
-#include "funcs.h"
+#define COLOR2_H
 
+
+// color2 is a single color channel + alpha
 struct color2
 {
     float r;
     float a;
 };
+
+
+//
+// For color2, define math operators to match color
+//
 
 color2 __operator__neg__(color2 a)
 {
@@ -130,6 +137,12 @@ int __operator__ne__(color2 a, color2 b)
     return (a.r != b.r) || (a.a != b.a);
 }
 
+
+
+//
+// For color2, define most of the stdosl functions to match color
+//
+
 color2 abs(color2 a)
 {
     return color2(abs(a.r), abs(a.a));
@@ -150,35 +163,13 @@ color2 smoothstep(color2 edge0, color2 edge1, color2 c)
 {
     return color2(smoothstep(edge0.r, edge1.r, c.r),
                   smoothstep(edge0.a, edge1.a, c.a));
-}    
+}
 
 color2 smoothstep(float edge0, float edge1, color2 c)
 {
     return smoothstep(color2(edge0, edge0), color2(edge1, edge1), c);
 }
 
-color2 remap(color2 c, color2 inLow, color2 inHigh, color2 outLow, color2 outHigh, int doClamp)
-{
-      //remap from [inLow, inHigh] to [outLow, outHigh], optionally clampina to the new ranae
-      return color2(remap(c.r, inLow.r, inHigh.r, outLow.r, outHigh.r, doClamp),
-                    remap(c.a, inLow.a, inHigh.a, outLow.a, outHigh.a, doClamp));
-}
-
-color2 remap(color2 c, float inLow, float inHigh, float outLow, float outHigh, int doClamp)
-{
-    return remap(c, color2(inLow, inLow), color2(inHigh, inHigh), color2(outLow, outLow), color2(outHigh, outHigh), doClamp);
-}
-
-color2 fgamma(color2 c, color2 a)
-{
-    return color2(fgamma(c.r, a.r),
-                  fgamma(c.a, a.a));
-}
-
-color2 fgamma(color2 c, float a){
-    return fgamma(c, color2(a, a));
-}
-  
 color2 clamp(color2 c, color2 minval, color2 maxval)
 {
     return color2(clamp(c.r, minval.r, maxval.r),
@@ -190,26 +181,16 @@ color2 clamp(color2 c, float minval, float maxval)
     return clamp(c, color2(minval, minval), color2(maxval, maxval));
 }
 
-color2 contrast(color2 c, color2 amount, color2 pivot)
+color2 pow(color2 base, color2 power)
 {
-    return color2(contrast(c.r, amount.r, pivot.r),
-                  contrast(c.a, amount.a, pivot.a));
-}    
-
-color2 contrast(color2 c, float amount, float pivot)
-{
-    return contrast(c, color2(amount, amount), color2(pivot, pivot));
-}    
-
-color2 exponent(color2 bgse, color2 power)
-{
-    return color2(exponent(bgse.r, power.r),
-                  exponent(bgse.a, power.a));
+    return color2(pow(base.r, power.r),
+                  pow(base.a, power.a));
 }
 
-color2 exponent(color2 bgse, float power)
+color2 pow(color2 base, float power)
 {
-    return exponent(bgse, color2(power, power));
+    return color2(pow(base.r, power),
+                  pow(base.a, power));
 }
 
 color2 max(color2 a, color2 b)
@@ -252,39 +233,12 @@ color2 fmod(color2 a, float b)
     return fmod(a, color2(b, b));
 }
 
-color2 unpremult(color2 a)
+color2 pow(color2 base, color2 power)
 {
-    return color2(a.r / a.a, a.a);
+    return color2(pow(base.r, power.r), pow(base.a, power.a));
 }
 
-color2 premult(color2 a)
+color2 pow(color2 base, float power)
 {
-    return color2(a.r * a.a, a.a);
-}
-
-color2 cmatte(color2 fg, color2 bg)
-{
-    return color2((fg.r * fg.a) + bg.r * (1 - fg.a),
-                   fg.a + bg.a * (1 - fg.a));
-}
-
-color2 disjointover(color2 fg, color2 bg)
-{
-    float summedAlpha = fg.a + bg.a;
-
-    color2 out;
-    if (summedAlpha <= 1) {
-        out.r = fg.r + bg.r;
-    } else {
-        out.r = fg.r + ((bg.r * (1-fg.a)) / bg.a);
-    }
-
-    out.a = min(summedAlpha, 1);
-    return out;
-}
-
-color2 overlay(color2 fg, color2 bg)
-{
-    return color2(overlay(fg.r, bg.r),  
-                  overlay(fg.a, bg.a));
+    return pow(base, color2(power, power));
 }

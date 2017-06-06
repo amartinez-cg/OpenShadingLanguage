@@ -6,6 +6,23 @@
 
 #include "mx_types.h"
 
+
+//
+// cluminance extracts the luminance of a color (with given color channel
+// weight coefficients).
+//
+float cluminance( color in, color lumacoeffs)
+{
+    return dot(in, lumacoeffs);
+}
+
+float cluminance(color4 in, color lumacoeffs)
+{
+    return cluminance (in.rgb, lumacoeffs);
+}
+
+
+
 shader SHADER_NAME(mx_luminance)
     [[ string help = "Output a grayscale image containing the luminance of the incoming RGB color in all color channels." ]]
   (
@@ -14,5 +31,9 @@ shader SHADER_NAME(mx_luminance)
     output TYPE out = TYPE_ZERO
   )
 {
+#if defined(COLOR2) || defined(COLOR4)
+    out = TYPE (cluminance(in, lumacoeffs), in.a);
+#else
     out = cluminance(in, lumacoeffs);
+#endif
 }

@@ -6,6 +6,26 @@
 
 #include "mx_types.h"
 
+//
+// premult multiplies an RGB color by alpha
+//
+color premult(color in, float alpha)
+{
+    return in * alpha;
+}
+
+color2 premult(color2 a)
+{
+    return color2(a.r * a.a, a.a);
+}
+
+color4 premult(color4 a)
+{
+    return color4(a.rgb * a.a, a.a);
+}
+
+
+
 shader SHADER_NAME(mx_premult)
     [[ string help = TYPE_STR" Multiply the R or RGB channels of the input by the Alpha channel of the input." ]]
   (

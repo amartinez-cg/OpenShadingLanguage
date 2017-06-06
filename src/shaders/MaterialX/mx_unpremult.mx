@@ -6,6 +6,26 @@
 
 #include "mx_types.h"
 
+//
+// unpremult divides an RGB color by alpha
+//
+color unpremult(color in, float alpha)
+{
+    return in * (1 / alpha);
+}
+
+color2 unpremult(color2 a)
+{
+    return color2(a.r / a.a, a.a);
+}
+
+color4 unpremult(color4 a)
+{
+    return color4(a.rgb / a.a, a.a);
+}
+
+
+
 shader SHADER_NAME(mx_unpremult)
     [[ string help = TYPE_STR" Divide the R or RGB channels of the input by the Alpha channel of the input." ]]
   (

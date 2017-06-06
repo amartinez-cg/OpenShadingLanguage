@@ -14,5 +14,5 @@ shader SHADER_NAME(mx_exponent)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    out = exponent(in1, in2); 
+    out = pow(in1, in2);
 }
