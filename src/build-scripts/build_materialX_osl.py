@@ -2,6 +2,12 @@
 Generate compilable .osl files from .mx templates
 
 Adam Martinez
+
+TODO:  Some functionalization in place, can it be expanded?
+       Add command line arguments for OSL_DEST path
+       Add ability to specify shader and shader type to compile to osl
+       Add option to compile resulting .osl files using customizable OSLC path
+       Is there a more compact representation of the BUILD_DICT we can employ?
 '''
 
 import os
@@ -14,6 +20,7 @@ OSL_DEST = '../../dist/linux64/shaders/MaterialX'
 MX_SOURCE_EXT = 'mx'
 
 OSLC_CMD = 'oslc '
+OSLC_PATH = ''
 
 SHADER_TYPES = {
     'FLOAT': 'float',
@@ -22,7 +29,14 @@ SHADER_TYPES = {
     'COLOR4': 'color4',
     'VECTOR': 'vector',
     'VECTOR2': 'vector2',
-    'VECTOR4': 'vector4'
+    'VECTOR4': 'vector4',
+    'SURFACESHADER': 'closure color',
+    'MATRIX44': 'matrix',
+    'MATRIX33': 'matrix',
+    'STRING': 'string',
+    'FILENAME': 'string',
+    'BOOL': 'bool',
+    'INT': 'int',
 }
 
 ALL_TYPES = ['FLOAT', 'COLOR', 'COLOR2', 'COLOR4', 'VECTOR', 'VECTOR2', 'VECTOR4']
@@ -45,7 +59,7 @@ BUILD_DICT = {
     'mx_crossproduct': ['VECTOR'],
     'mx_dodge': ['FLOAT', 'COLOR', 'COLOR2', 'COLOR4'],
     'mx_dotproduct': ['VECTOR', 'VECTOR2', 'VECTOR4'],
-    'mx_dot': ALL_TYPES + ['MATRIX44', 'MATRIX33', 'STRING', 'FILENAME', 'BOOL', 'INT'],
+    'mx_dot': ALL_TYPES + ['MATRIX44', 'MATRIX33', 'STRING', 'FILENAME', 'BOOL', 'INT', 'SURFACESHADER'],
     'mx_floor': ALL_TYPES,
     'mx_frame': ['FLOAT'],
     'mx_geomattrvalue': ALL_TYPES + ['BOOL', 'STRING', 'INT'],
@@ -97,8 +111,8 @@ BUILD_DICT = {
     'mx_pack': ['COLOR', 'COLOR2', 'COLOR4', 'VECTOR', 'VECTOR2', 'VECTOR4'],
     'mx_pack_cf': ['COLOR4'],
     'mx_pack_cc': ['COLOR4'],
-    'mx_pack_vf': ['COLOR4'],
-    'mx_pack_vv': ['COLOR4'],
+    'mx_pack_vf': ['VECTOR4'],
+    'mx_pack_vv': ['VECTOR4'],
     'mx_position': ['VECTOR'],
     'mx_premult': ['COLOR', 'COLOR2', 'COLOR4'],
     'mx_ramp4': ALL_TYPES,
@@ -129,25 +143,42 @@ BUILD_DICT = {
     'mx_mult_surfaceshader': ['COLOR', 'FLOAT']
 }
 
-for shader, shader_types in BUILD_DICT.items():
-
+def open_mx_file(shader):
     mx_filename = '%s.%s' % (shader, MX_SOURCE_EXT)
     mx_filepath = os.path.join(MX_SOURCE, mx_filename)
     try:
         mx_file = open(mx_filepath, 'r')
     except:
         print('ERROR: %s not found' % mx_filename)
-        continue
+        return None
     mx_code = mx_file.read()
     mx_file.close()
-    for var_type in shader_types:
-        osl_shadername = '%s_%s' % (shader, SHADER_TYPES[var_type])
-        osl_filename = '%s.osl' % (osl_shadername)
-        osl_filepath = os.path.join(OSL_DEST, osl_filename)
-        print('Building %s' % osl_filename)
-        osl_code = mx_code.replace('SHADER_NAME(%s)' % shader, osl_shadername)
-        osl_code = osl_code.replace('#include \"mx_types.h\"', '#define %s 1\n#include \"mx_types.h\"' % var_type)
-        osl_code = re.sub(r'\bTYPE\b', SHADER_TYPES[var_type], osl_code)
-        osl_file = open(osl_filepath, 'w')
-        osl_file.write(osl_code)
-        osl_file.close()
+    return mx_code
+
+def write_osl_file(osl_shadername, osl_code):
+    osl_filename = '%s.osl' % (osl_shadername)
+    osl_filepath = os.path.join(OSL_DEST, osl_filename)
+    osl_file = open(osl_filepath, 'w')
+    osl_file.write(osl_code)
+    osl_file.close()
+
+def mx_to_osl(shader, shader_types):
+    
+    mx_code = open_mx_file(shader)
+    if mx_code is not None:
+        for var_type in shader_types:
+            osl_shadername = '%s_%s' % (shader, SHADER_TYPES[var_type])
+            
+            print('Building %s' % osl_filename)
+            osl_code = mx_code.replace('SHADER_NAME(%s)' % shader, osl_shadername)
+            osl_code = osl_code.replace('#include \"mx_types.h\"', '#define %s 1\n#include \"mx_types.h\"' % var_type)
+            osl_code = re.sub(r'\bTYPE\b', SHADER_TYPES[var_type], osl_code)
+            write_osl_file(osl_shadername, osl_code)
+
+def main():
+    for shader, shader_types in BUILD_DICT.items():
+        mx_to_osl(shader, shader_types)
+
+
+if __name__ == "__main__":
+    main()
