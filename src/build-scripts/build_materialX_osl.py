@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 Generate compilable .osl files from .mx templates
 
@@ -169,16 +170,18 @@ def mx_to_osl(shader, shader_types):
         for var_type in shader_types:
             osl_shadername = '%s_%s' % (shader, SHADER_TYPES[var_type])
             
-            print('Building %s' % osl_filename)
+            print('Building %s' % osl_shadername)
             osl_code = mx_code.replace('SHADER_NAME(%s)' % shader, osl_shadername)
             osl_code = osl_code.replace('#include \"mx_types.h\"', '#define %s 1\n#include \"mx_types.h\"' % var_type)
             osl_code = re.sub(r'\bTYPE\b', SHADER_TYPES[var_type], osl_code)
             write_osl_file(osl_shadername, osl_code)
 
 def main():
+    i = 0
     for shader, shader_types in BUILD_DICT.items():
         mx_to_osl(shader, shader_types)
-
+        i += 1
+    print("Generated " + str(i) + " OSL files in " + OSL_DEST)
 
 if __name__ == "__main__":
     main()
