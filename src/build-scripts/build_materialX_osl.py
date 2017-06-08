@@ -5,24 +5,17 @@ Generate compilable .osl files from .mx templates
 Adam Martinez
 
 TODO:  Some functionalization in place, can it be expanded?
-       Add command line arguments for OSL_DEST path
        Add ability to specify shader and shader type to compile to osl
-       Add option to compile resulting .osl files using customizable OSLC path
        Is there a more compact representation of the BUILD_DICT we can employ?
 '''
 
 import os
 import sys
 import re
+import argparse
+from subprocess import call
 
-MX_SOURCE = '../shaders/MaterialX'
-OSL_DEST = '../../dist/linux64/shaders/MaterialX'
-
-MX_SOURCE_EXT = 'mx'
-
-OSLC_CMD = 'oslc '
-OSLC_PATH = ''
-
+# SHADER_TYPES map preprocessor flags to osl type declarations 
 SHADER_TYPES = {
     'FLOAT': 'float',
     'COLOR': 'color',
@@ -36,6 +29,24 @@ SHADER_TYPES = {
     'MATRIX33': 'matrix',
     'STRING': 'string',
     'FILENAME': 'string',
+    'BOOL': 'bool',
+    'INT': 'int',
+}
+
+# TYPE_STRING used for type suffix in osl filenames. Could use var_type.lower(). 
+TYPE_STRING = {
+    'FLOAT': 'float',
+    'COLOR': 'color',
+    'COLOR2': 'color2',
+    'COLOR4': 'color4',
+    'VECTOR': 'vector',
+    'VECTOR2': 'vector2',
+    'VECTOR4': 'vector4',
+    'SURFACESHADER': 'surfaceshader',
+    'MATRIX44': 'matrix44',
+    'MATRIX33': 'matrix33',
+    'STRING': 'string',
+    'FILENAME': 'filename',
     'BOOL': 'bool',
     'INT': 'int',
 }
@@ -144,9 +155,10 @@ BUILD_DICT = {
     'mx_mult_surfaceshader': ['COLOR', 'FLOAT']
 }
 
-def open_mx_file(shader):
-    mx_filename = '%s.%s' % (shader, MX_SOURCE_EXT)
-    mx_filepath = os.path.join(MX_SOURCE, mx_filename)
+# open_mx_file:  open a file on disk and return its contents
+def open_mx_file(shader, options):
+    mx_filename = '%s.%s' % (shader, options['mx_ext'])
+    mx_filepath = os.path.join(options['source'], mx_filename)
     try:
         mx_file = open(mx_filepath, 'r')
     except:
@@ -156,32 +168,82 @@ def open_mx_file(shader):
     mx_file.close()
     return mx_code
 
-def write_osl_file(osl_shadername, osl_code):
+# write_mx_file: write the osl_code text to a file
+def write_osl_file(osl_shadername, osl_code, options):
     osl_filename = '%s.osl' % (osl_shadername)
-    osl_filepath = os.path.join(OSL_DEST, osl_filename)
-    osl_file = open(osl_filepath, 'w')
-    osl_file.write(osl_code)
-    osl_file.close()
+    osl_filepath = os.path.join(options['dest'], osl_filename)
+    try:
+        osl_file = open(osl_filepath, 'w')
+        osl_file.write(osl_code)
+        osl_file.close()
+        return osl_filepath
+    except:
+        print('ERROR: Could not open %s for writing' % mx_filename)
+        return None
 
-def mx_to_osl(shader, shader_types):
-    
-    mx_code = open_mx_file(shader)
+# mx_to_osl: open an mx file and for each type in the BUILD_DICT, generate a corresponding .osl file
+def mx_to_osl(shader, shader_types, options):    
+    mx_code = open_mx_file(shader, options)
     if mx_code is not None:
         for var_type in shader_types:
-            osl_shadername = '%s_%s' % (shader, SHADER_TYPES[var_type])
-            
-            print('Building %s' % osl_shadername)
+            osl_shadername = '%s_%s' % (shader, TYPE_STRING[var_type])            
+            if options['v']:
+                print('Building %s' % osl_shadername)
             osl_code = mx_code.replace('SHADER_NAME(%s)' % shader, osl_shadername)
             osl_code = osl_code.replace('#include \"mx_types.h\"', '#define %s 1\n#include \"mx_types.h\"' % var_type)
             osl_code = re.sub(r'\bTYPE\b', SHADER_TYPES[var_type], osl_code)
-            write_osl_file(osl_shadername, osl_code)
+            osl_filepath = write_osl_file(osl_shadername, osl_code, options)
+            
+            # build oso bytecode if compile flag is on
+            if options['compile']:
+                oso_filename = '%s.oso'%(osl_shadername)
+                osl_filepath = '%s.osl' % (osl_shadername)
+                if options['v']:
+                    print('Executing: '+ options['oslc_exec']+' '+osl_filepath)
+                call([options['oslc_exec'], '-I..', osl_filepath], cwd=options['dest'])
 
 def main():
-    i = 0
-    for shader, shader_types in BUILD_DICT.items():
-        mx_to_osl(shader, shader_types)
-        i += 1
-    print("Generated " + str(i) + " OSL files in " + OSL_DEST)
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-arch','--arch', default='linux64', help='Build architecture flag.  Default: linux64')
+    parser.add_argument('-v','--v', default=0, help='Verbosity, 0|1.  Default: 0')
+    parser.add_argument('-mx','--mx', default='../shaders/MaterialX', help='MaterialX source directory.  Default: ../shaders/MaterialX')
+    parser.add_argument('-oslc_path', '--oslc_path', default='', help='Path to oslc executable.  Default: environment default')
+    parser.add_argument('-compile', '--compile', default=0, help='Compile generated osl files 0|1.  Default: 0')
+    
+    args = parser.parse_args()
 
-if __name__ == "__main__":
+    # create a dictionary of options
+    oslc_exec = 'oslc'
+    if args.oslc_path != '':
+        oslc_exec = str(os.path.abspath(os.path.join(args.oslc_path, 'oslc')))
+
+    options_dict = {
+        'v':int(args.v),
+        'source': args.mx,
+        'dest': '../../build/%s/src/shaders/MaterialX'%args.arch,
+        'arch': args.arch,
+        'mx_ext': 'mx',
+        'oslc_path': args.oslc_path,
+        'oslc_exec': oslc_exec,
+        'compile': args.compile
+    }
+
+    # sanity check paths
+    if not os.path.exists(options_dict['dest']):
+        print('ERROR: Destination path %s does not exist'%options_dict['dest'])
+        return
+
+    if not os.path.exists(options_dict['source']):
+        print('ERROR: Source path %s does not exist'%options_dict['source'])
+        return
+
+    # Loop over each shader
+    i = 0    
+    for shader, shader_types in BUILD_DICT.items():
+        mx_to_osl(shader, shader_types, options_dict)
+        i += len(shader_types)
+    print('Generated ' + str(i) + ' OSL files in ' + options_dict['dest'])
+
+if __name__ == '__main__':
     main()

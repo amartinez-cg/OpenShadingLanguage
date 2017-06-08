@@ -1,3 +1,13 @@
+file (GLOB shader_headers "*.h")
+
+foreach (_shader_header ${shader_headers})
+    get_filename_component (_shader_header_name ${_shader_header} NAME)
+    add_custom_command (OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_shader_header_name}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_shader_header}" "${CMAKE_CURRENT_BINARY_DIR}"
+        MAIN_DEPENDENCY "${_shader_header}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+endforeach()
+
 add_custom_command (OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/oslutil.h"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/oslutil.h" "${CMAKE_CURRENT_BINARY_DIR}"
         MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/oslutil.h"
