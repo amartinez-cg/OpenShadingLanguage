@@ -20,7 +20,7 @@ shader SHADER_NAME(mx_switch)
 {
     int selection = int(clamp(floor(which), 1, 5));
     
-    if( selection == 1 ){
+    if (selection == 1){
         out = in1;
     } else if (selection == 2){
         out = in2;
