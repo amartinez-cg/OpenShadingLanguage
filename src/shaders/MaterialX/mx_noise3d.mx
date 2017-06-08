@@ -27,7 +27,6 @@ shader SHADER_NAME(mx_noise3d)
 {
     //float noise(P) is equal to the red channel of color noise(P)
     //so we offset the float noise lookup to make them different.
-
     float fnoise = (float) noise (noisetype, position + point(19, 193, 17));
     
     color cnoise = (color) noise (noisetype, position);

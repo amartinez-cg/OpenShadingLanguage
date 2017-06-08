@@ -19,16 +19,13 @@ shader SHADER_NAME(mx_remap_float)
     output TYPE out = TYPE_DEFAULT_OUT
   )
 {
-    float zero = 0;
-    float one = 1;
-
     //remap from [inlow, inhigh] to [0,1]
-    out = remap(in, inlow, inhigh, zero, one, 0);
+    out = remap(in, inlow, inhigh, 0, 1, 0);
 
     //apply gamma
     out = fgamma(out, gamma);
 
     //remap from [0,1] to [outlow, outhigh]
-    out = remap(out, zero, one, outlow, outhigh, doclamp); 
+    out = remap(out, 0, 1, outlow, outhigh, doclamp); 
 
 }

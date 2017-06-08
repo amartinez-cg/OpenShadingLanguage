@@ -31,7 +31,6 @@ shader SHADER_NAME(mx_noise2d_fa)
     
     color cnoise = (color) noise (noisetype, texcoord.x, texcoord.y);
 
-
     #if defined(FLOAT)
         out = pivot + fnoise * amplitude;
     #elif defined(COLOR) || defined(VECTOR)
