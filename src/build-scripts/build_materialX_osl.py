@@ -217,9 +217,9 @@ def main():
     parser.add_argument('-v','--v', default=0, help='Verbosity, 0|1.  Default: 0')
     parser.add_argument('-mx','--mx', default='../shaders/MaterialX', help='MaterialX source directory.  Default: ../shaders/MaterialX')
     parser.add_argument('-oslc_path', '--oslc_path', default='', help='Path to oslc executable.  Default: environment default')
-    parser.add_argument('-compile', '--compile', default=0, help='Compile generated osl files 0|1.  Default: 0')
-    parser.add_argument('-s', '--shader', default='', help='Specify a single mx shader to convert without the file extension, e.g. mx_add.  Default: none')
-    parser.add_argument('-t', '--types', default='', help='List of types to convert the mx file specified by the -s flag, e.g. \'FLOAT COLOR\'.  Default: all')
+    parser.add_argument('-compile', '--compile', default=0, help='Compile generated osl files in place. 0|1.  Default: 0')
+    parser.add_argument('-s', '--shader', default='', help='Specify a comma separated list of mx shaders to convert without the file extension, e.g. mx_add,mx_absval.  Default: none')
+    parser.add_argument('-t', '--types', default='', help='Comma separated list of types to convert, e.g. FLOAT,COLOR.  Default: all')
 
     args = parser.parse_args()
 
@@ -237,7 +237,7 @@ def main():
         'oslc_path': args.oslc_path,
         'oslc_exec': oslc_exec,
         'compile': args.compile,
-        'types': args.types
+        'types': args.types.split(',')
     }
 
     # sanity check paths
@@ -251,19 +251,16 @@ def main():
 
     # If the shader flag was specified, we're only going to build the 
     # osl for the named mx file.  If the types flag was specified as well, 
-    # only generate osl for those types 
+    # only generate osl for those types
     if args.shader:
-        shader = args.shader
-        shader_types = BUILD_DICT[shader]
-        if args.types:
-            shader_types = args.types.split()
-        print('Generating %s OSL for types %s'%(shader, ', '.join(shader_types)))
-        mx_to_osl(shader, shader_types, options_dict)
-        return;
+        shaders = args.shader.split(',')
+        shader_list = {s: BUILD_DICT[s] for s in shaders}
+    else:
+        shader_list = BUILD_DICT
 
     # Loop over each shader
     i = 0    
-    for shader, shader_types in BUILD_DICT.items():
+    for shader, shader_types in shader_list.items():
         mx_to_osl(shader, shader_types, options_dict)
         i += len(shader_types)
     print('Generated ' + str(i) + ' OSL files in ' + options_dict['dest'])
