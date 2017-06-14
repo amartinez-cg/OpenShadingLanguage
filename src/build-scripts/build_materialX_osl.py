@@ -182,10 +182,11 @@ def write_osl_file(osl_shadername, osl_code, options):
         return None
 
 # mx_to_osl: open an mx file and for each type in the BUILD_DICT, generate a corresponding .osl file
-def mx_to_osl(shader, shader_types, options):    
+def mx_to_osl(shader, build_types, options):    
     mx_code = open_mx_file(shader, options)
+    build_count = 0
     if mx_code is not None:
-        for var_type in shader_types:
+        for var_type in build_types:
             if var_type in SHADER_TYPES:
                 if options['types']:
                     if not var_type in options['types']:
@@ -198,7 +199,7 @@ def mx_to_osl(shader, shader_types, options):
                 osl_code = osl_code.replace('#include \"mx_types.h\"', '#define %s 1\n#include \"mx_types.h\"' % var_type)
                 osl_code = re.sub(r'\bTYPE\b', SHADER_TYPES[var_type], osl_code)
                 osl_filepath = write_osl_file(osl_shadername, osl_code, options)
-                
+                build_count += 1
                 # build oso bytecode if compile flag is on
                 if options['compile']:
                     oso_filename = '%s.oso'%(osl_shadername)
@@ -209,6 +210,7 @@ def mx_to_osl(shader, shader_types, options):
             else:
                 print('Type %s not found in supported types.'%var_type)
                 continue;
+    return build_count
 
 def main():
     # Parse arguments
@@ -225,8 +227,13 @@ def main():
 
     # create a dictionary of options
     oslc_exec = 'oslc'
+    types = None
+
     if args.oslc_path != '':
         oslc_exec = str(os.path.abspath(os.path.join(args.oslc_path, 'oslc')))
+
+    if args.types != '':
+        types = args.types.split(',')
 
     options_dict = {
         'v':int(args.v),
@@ -237,7 +244,7 @@ def main():
         'oslc_path': args.oslc_path,
         'oslc_exec': oslc_exec,
         'compile': args.compile,
-        'types': args.types.split(',')
+        'types': types
     }
 
     # sanity check paths
@@ -261,8 +268,7 @@ def main():
     # Loop over each shader
     i = 0    
     for shader, shader_types in shader_list.items():
-        mx_to_osl(shader, shader_types, options_dict)
-        i += len(shader_types)
+        i += mx_to_osl(shader, shader_types, options_dict)
     print('Generated ' + str(i) + ' OSL files in ' + options_dict['dest'])
 
 if __name__ == '__main__':
