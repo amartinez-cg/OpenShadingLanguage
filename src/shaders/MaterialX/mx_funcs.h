@@ -25,7 +25,7 @@ float remap(float in, float inLow, float inHigh, float outLow, float outHigh, in
 {
       float x = (in - inLow)/(inHigh-inLow);
       if (doClamp == 1) {
-           x = clamp(x, outLow, outHigh);
+           x = clamp(x, 0, 1);
       }
       return outLow + (outHigh - outLow) * x;
 }
@@ -34,7 +34,7 @@ color remap(color in, color inLow, color inHigh, color outLow, color outHigh, in
 {
       color x = (in - inLow) / (inHigh - inLow);
       if (doClamp == 1) {
-           x = clamp(x, outLow, outHigh);
+           x = clamp(x, 0, 1);
       }
       return outLow + (outHigh - outLow) * x;
 }
@@ -43,7 +43,7 @@ color remap(color in, float inLow, float inHigh, float outLow, float outHigh, in
 {
       color x = (in - inLow) / (inHigh - inLow);
       if (doClamp == 1) {
-           x = clamp(x, outLow, outHigh);
+           x = clamp(x, 0, 1);
       }
       return outLow + (outHigh - outLow) * x;
 }
@@ -251,10 +251,9 @@ float fBm( point position, int octaves, float lacunarity, float diminish, string
 {
     float out = 0;
     float amp = 1.0;
-    float i;
     point p = position;
 
-    for (i = 0;  i < octaves;  i += 1) {
+    for (int i = 0;  i < octaves;  i += 1) {
         out += amp * noise(noisetype, p);
         amp *= diminish;
         p *= lacunarity;
@@ -267,10 +266,9 @@ color fBm( point position, int octaves, float lacunarity, float diminish, string
 
     color out = 0;
     float amp = 1.0;
-    float i;
     point p = position;
 
-    for (i = 0;  i < octaves;  i += 1) {
+    for (int i = 0;  i < octaves;  i += 1) {
         out += amp * (color)noise(noisetype, p);
         amp *= diminish;
         p *= lacunarity;
