@@ -7,7 +7,7 @@
 #include "mx_types.h"
 
 shader SHADER_NAME(mx_ramp4)
-    [[ string help = "linear value ramp source, top to bottom" ]]
+    [[ string help = "bilinear 4-corner ramp source" ]]
   (
     TYPE valuetl = TYPE_ZERO
         [[  string help = "value at the top right (s=0,t=0) edge"  ]],

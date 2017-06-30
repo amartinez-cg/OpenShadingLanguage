@@ -122,10 +122,10 @@ foreach (_shadertype ${FA_op_types})
     osl_compile (mx_remap_float.mx ${_shadertype} shader_objs shader_headers)
     osl_compile (mx_smoothstep_float.mx ${_shadertype} shader_objs shader_headers)
     osl_compile (mx_swizzle_float.mx ${_shadertype} shader_objs shader_headers)
-    osl_compile (mx_pack.mx ${_shadertype} shader_objs shader_headers)
     osl_compile (mx_noise2d_fa.mx ${_shadertype} shader_objs shader_headers)
     osl_compile (mx_noise3d_fa.mx ${_shadertype} shader_objs shader_headers)    
     osl_compile (mx_fractal3d_fa.mx ${_shadertype} shader_objs shader_headers)
+    osl_compile (mx_pack.mx ${_shadertype} shader_objs shader_headers)
 
 endforeach ()
 
@@ -246,10 +246,10 @@ endforeach ()
     osl_compile (mx_outside.mx COLOR2 shader_objs shader_headers)
     osl_compile (mx_outside.mx COLOR shader_objs shader_headers)
     osl_compile (mx_outside.mx COLOR4 shader_objs shader_headers)
-        
+
     osl_compile (mx_pack_cf.mx COLOR4 shader_objs shader_headers)
     osl_compile (mx_pack_cc.mx COLOR4 shader_objs shader_headers)
-
+        
     osl_compile (mx_pack_vf.mx VECTOR4 shader_objs shader_headers)
     osl_compile (mx_pack_vv.mx VECTOR4 shader_objs shader_headers)
 

@@ -13,8 +13,14 @@ shader SHADER_NAME(mx_pack)
     
     float in1 = 0,
     float in2 = 0,
+
+    #if defined(COLOR) || defined(VECTOR) || defined(COLOR4) || defined(VECTOR4)
     float in3 = 0,
+    #endif
+
+    #if defined(COLOR4) || defined(VECTOR4)   
     float in4 = 0,
+    #endif
     
     output TYPE out = TYPE_ZERO
   )
