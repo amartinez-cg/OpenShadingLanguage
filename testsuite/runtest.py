@@ -38,12 +38,23 @@ if args and len(args) > 1 :
     path = args[1]
 path = os.path.normpath (path)
 
+
+parts = srcdir.split("/")
+parts = parts[parts.index("testsuite")+1:]
+path = "/".join([".." for x in range(len(parts))])
+test_source_dir = path + "/../../testsuite/" + "/".join(parts)
+root = path + "../../"
+testroot = "/".join([".." for x in range(len(parts)-1)])
+
+
+#srcdir = "/".join(parts[parts.index("testsuite")+1:])
+
 tmpdir = "."
 tmpdir = os.path.abspath (tmpdir)
 
 refdir = "ref/"
 parent = "../../../../../"
-test_source_dir = "../../../../testsuite/" + os.path.basename(os.path.abspath(srcdir))
+
 
 command = ""
 outputs = [ "out.txt" ]    # default
@@ -80,8 +91,8 @@ else :
         os.symlink (os.path.join (test_source_dir, "src"), "./src")
     if not os.path.exists("./data") :
         os.symlink (test_source_dir, "./data")
-    if not os.path.exists("../common") :
-        os.symlink ("../../../testsuite/common", "../common")
+    if not os.path.exists(testroot + "/common") :
+        os.symlink (root + "/testsuite/common", testroot + "/common")
 
 ###########################################################################
 
@@ -296,6 +307,9 @@ def runtest (command, outputs, failureok=0, failthresh=0, failpercent=0) :
 with open(os.path.join(test_source_dir,"run.py")) as f:
     code = compile(f.read(), "run.py", 'exec')
     exec (code)
+
+if command is None:
+    sys.exit(0)
 # if os.path.exists("run.py") :
 #     execfile ("run.py")
 
@@ -336,5 +350,5 @@ if (os.path.exists("ref/out.tif") and ("out.tif" not in outputs)) :
 
 # Run the test and check the outputs
 ret = runtest (command, outputs, failureok=failureok,
-               failthresh=failthresh, failpercent=failpercent)
+                   failthresh=failthresh, failpercent=failpercent)
 sys.exit (ret)

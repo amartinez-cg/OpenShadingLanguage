@@ -186,9 +186,16 @@ macro ( TESTSUITE )
     endif ()
     # Add the tests if all is well.
     set (ALL_TEST_LIST "")
+
+    if (!${_subdir})
+        set(_subdir, "")
+    else ()
+        set(_subdir "${_subdir}/")    
+    endif()    
+
     foreach (_testname ${_ats_DEFAULT_ARGS})
-        set (_testsrcdir "${CMAKE_SOURCE_DIR}/testsuite/${_testname}")
-        set (_testdir "${CMAKE_BINARY_DIR}/testsuite/${_testname}")
+        set (_testsrcdir "${CMAKE_SOURCE_DIR}/testsuite/${_subdir}${_testname}")
+        set (_testdir "${CMAKE_BINARY_DIR}/testsuite/${_subdir}${_testname}")
         if (_ats_LABEL MATCHES "broken")
             set (_testname "${_testname}-broken")
         endif ()
@@ -207,13 +214,13 @@ macro ( TESTSUITE )
             NOT _testname MATCHES "^oslinfo" AND
             NOT _testname MATCHES "^getattribute-shader" AND
             NOT EXISTS "${_testsrcdir}/OPTIMIZEONLY")
-          set (_env TESTSHADE_OPT=0 OPENIMAGEIOHOME=${OPENIMAGEIOHOME})
+          set (_env TESTSHADE_OPT=0 OPENIMAGEIOHOME=${OPENIMAGEIOHOME} ${_env})
           add_test ( NAME ${_testname}
                      COMMAND env ${_env} ${_runtest} )
         endif ()
         # Run the same test again with aggressive -O2 runtime
         # optimization, triggered by setting TESTSHADE_OPT env variable
-        set (_env TESTSHADE_OPT=2 OPENIMAGEIOHOME=${OPENIMAGEIOHOME})
+        set (_env TESTSHADE_OPT=2 OPENIMAGEIOHOME=${OPENIMAGEIOHOME} ${_env})
         set (ALL_TEST_LIST "${ALL_TEST_LIST} ${_testname}")
         add_test ( NAME ${_testname}.opt
                    COMMAND env ${_env} ${_runtest} )
@@ -226,7 +233,8 @@ endmacro ()
 if (OSL_BUILD_TESTS)
 # List all the individual testsuite tests here, except those that need
 # special installed tests.
-TESTSUITE ( and-or-not-synonyms aastep arithmetic array array-derivs array-range
+TESTSUITE ( 
+and-or-not-synonyms aastep arithmetic array array-derivs array-range
             blackbody blendmath breakcont
             bug-array-heapoffsets
             bug-locallifetime bug-outputinit bug-param-duplicate bug-peep
@@ -293,7 +301,8 @@ TESTSUITE ( and-or-not-synonyms aastep arithmetic array array-derivs array-range
             vararray-connect vararray-default
             vararray-deserialize vararray-param
             vecctr vector
-            wavelength_color xml )
+            wavelength_color xml
+)
 
 # Only run field3d-related tests if the local OIIO was built with f3d support.
 EXECUTE_PROCESS ( COMMAND ${OPENIMAGEIO_BIN}/oiiotool --help
@@ -306,6 +315,8 @@ endif()
 if (PARTIO_FOUND)
     TESTSUITE ( pointcloud pointcloud-fold )
 endif ()
+
+add_subdirectory(testsuite/MaterialX)
 
 endif (OSL_BUILD_TESTS)
 
