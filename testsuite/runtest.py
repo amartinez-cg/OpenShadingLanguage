@@ -91,9 +91,9 @@ else :
         os.symlink (os.path.join (test_source_dir, "src"), "./src")
     if not os.path.exists("./data") :
         os.symlink (test_source_dir, "./data")
-    if not os.path.exists(testroot + "/common") :
-        os.symlink (root + "/testsuite/common", testroot + "/common")
-
+    if not os.path.exists("../common") :
+        os.symlink ("../../../testsuite/common", "../common")
+ 
 ###########################################################################
 
 # Handy functions...
